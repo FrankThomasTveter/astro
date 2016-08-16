@@ -1,0 +1,164 @@
+ dpkg-buildpackage -rfakeroot -D -us -uc -i -b
+dpkg-buildpackage: export CFLAGS from dpkg-buildflags (origin: vendor): -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security
+dpkg-buildpackage: export CPPFLAGS from dpkg-buildflags (origin: vendor): -D_FORTIFY_SOURCE=2
+dpkg-buildpackage: export CXXFLAGS from dpkg-buildflags (origin: vendor): -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security
+dpkg-buildpackage: export FFLAGS from dpkg-buildflags (origin: vendor): -g -O2
+dpkg-buildpackage: export LDFLAGS from dpkg-buildflags (origin: vendor): -Wl,-Bsymbolic-functions -Wl,-z,relro
+dpkg-buildpackage: source package libmetno-astro-almanacalgorithm-perl
+dpkg-buildpackage: source version 0.10-1
+dpkg-buildpackage: source changed by Frank Tveter <frank.tveter@met.no>
+ dpkg-source -i --before-build Metno-Astro-AlmanacAlgorithm
+dpkg-buildpackage: host architecture amd64
+ fakeroot debian/rules clean
+dh_testdir
+dh_testroot
+dh_clean build-stamp install-stamp
+# Add commands to clean up after the build process here
+[ ! -f Makefile ] || /usr/bin/make realclean
+make[1]: Entering directory `/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm'
+rm -f \
+	  *.a core \
+	  core.[0-9] blib/arch/auto/Metno/Astro/AlmanacAlgorithm/extralibs.all \
+	  AlmanacAlgorithm.c core.[0-9][0-9] \
+	  AlmanacAlgorithm.bso pm_to_blib.ts \
+	  core.[0-9][0-9][0-9][0-9] MYMETA.yml \
+	  AlmanacAlgorithm.x AlmanacAlgorithm.bs \
+	  perl tmon.out \
+	  *.o pm_to_blib \
+	  blib/arch/auto/Metno/Astro/AlmanacAlgorithm/extralibs.ld blibdirs.ts \
+	  core.[0-9][0-9][0-9][0-9][0-9] *perl.core \
+	  core.*perl.*.? Makefile.aperl \
+	  AlmanacAlgorithm.def perl \
+	  core.[0-9][0-9][0-9] mon.out \
+	  libAlmanacAlgorithm.def perlmain.c \
+	  perl.exe so_locations \
+	  AlmanacAlgorithm.exp 
+rm -rf \
+	  blib 
+mv Makefile Makefile.old > /dev/null 2>&1
+rm -f \
+	  AlmanacAlgorithm.o Makefile.old \
+	  Makefile 
+rm -rf \
+	  Metno-Astro-AlmanacAlgorithm-0.06 
+make[1]: Leaving directory `/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm'
+ debian/rules build
+dh_testdir
+# As this is a architecture dependent package, we are not
+# supposed to install stuff to /usr/share. MakeMaker creates
+# the dirs, we prevent this by setting the INSTALLVENDORARCH
+# and VENDORARCHEXP environment variables.
+# Add commands to compile the package here
+/usr/bin/perl Makefile.PL INSTALLDIRS=vendor \
+		INSTALLVENDORARCH=/usr/lib/perl5/ \
+		VENDORARCHEXP=/usr/lib/perl5/
+Checking if your kit is complete...
+Warning: the following files are missing in your kit:
+	t/11-sunrise.t
+	t/12-sunrise.t
+	t/99-StressTest.t
+Please inform the author.
+Warning: -L.. changed to -L/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/..
+Warning: -L../../libfmnuke changed to -L/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/../../libfmnuke
+Warning: -L../../libsofa changed to -L/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/../../libsofa
+Writing Makefile for Metno::Astro::AlmanacAlgorithm
+Writing MYMETA.yml
+/usr/bin/make OPTIMIZE="-Wall -g -O2" LD_RUN_PATH=""
+make[1]: Entering directory `/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm'
+cp bomb.pl blib/lib/Metno/Astro/bomb.pl
+cp lib/Sunrise.pm blib/lib/Sunrise.pm
+cp check.pl blib/lib/Metno/Astro/check.pl
+cp t.pl blib/lib/Metno/Astro/t.pl
+cp lib/Metno/Astro/AlmanacAlgorithm.pm blib/lib/Metno/Astro/AlmanacAlgorithm.pm
+cp lib/Metno/Astro/JPLEPH.405 blib/lib/Metno/Astro/JPLEPH.405
+/usr/bin/perl /usr/share/perl/5.14/ExtUtils/xsubpp  -typemap /usr/share/perl/5.14/ExtUtils/typemap  AlmanacAlgorithm.xs > AlmanacAlgorithm.xsc && mv AlmanacAlgorithm.xsc AlmanacAlgorithm.c
+Please specify prototyping behavior for AlmanacAlgorithm.xs (see perlxs manual)
+cc -c  -I.. -D_REENTRANT -D_GNU_SOURCE -DDEBIAN -fno-strict-aliasing -pipe -fstack-protector -I/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -g -O2   -DVERSION=\"0.06\" -DXS_VERSION=\"0.06\" -fPIC "-I/usr/lib/perl/5.14/CORE"   AlmanacAlgorithm.c
+AlmanacAlgorithm.c: In function ‘XS_Metno__Astro__AlmanacAlgorithm_aa_calcSetRise’:
+AlmanacAlgorithm.c:416:9: warning: unused variable ‘deltaT’ [-Wunused-variable]
+AlmanacAlgorithm.c:415:6: warning: unused variable ‘jdflag’ [-Wunused-variable]
+AlmanacAlgorithm.c:414:9: warning: unused variable ‘pressure’ [-Wunused-variable]
+AlmanacAlgorithm.c:413:9: warning: unused variable ‘temperature’ [-Wunused-variable]
+AlmanacAlgorithm.xs:146:11: warning: variable ‘polar’ set but not used [-Wunused-but-set-variable]
+AlmanacAlgorithm.c: In function ‘XS_Metno__Astro__AlmanacAlgorithm_aa_calcAzimuthAltitude’:
+AlmanacAlgorithm.c:822:9: warning: unused variable ‘deltaT’ [-Wunused-variable]
+AlmanacAlgorithm.c:821:6: warning: unused variable ‘jdflag’ [-Wunused-variable]
+AlmanacAlgorithm.c:820:9: warning: unused variable ‘pressure’ [-Wunused-variable]
+AlmanacAlgorithm.c:819:9: warning: unused variable ‘temperature’ [-Wunused-variable]
+AlmanacAlgorithm.xs:518:14: warning: variable ‘range’ set but not used [-Wunused-but-set-variable]
+Running Mkbootstrap for Metno::Astro::AlmanacAlgorithm ()
+chmod 644 AlmanacAlgorithm.bs
+rm -f blib/arch/auto/Metno/Astro/AlmanacAlgorithm/AlmanacAlgorithm.so
+cc  -shared -O2 -g -L/usr/local/lib -fstack-protector AlmanacAlgorithm.o  -o blib/arch/auto/Metno/Astro/AlmanacAlgorithm/AlmanacAlgorithm.so 	\
+	   -L/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/.. -L/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/../../libfmnuke -L/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/../../libsofa -lastro -lfmnuke -lsofa -lgfortran  	\
+	  
+chmod 755 blib/arch/auto/Metno/Astro/AlmanacAlgorithm/AlmanacAlgorithm.so
+cp AlmanacAlgorithm.bs blib/arch/auto/Metno/Astro/AlmanacAlgorithm/AlmanacAlgorithm.bs
+chmod 644 blib/arch/auto/Metno/Astro/AlmanacAlgorithm/AlmanacAlgorithm.bs
+Manifying blib/man3/Sunrise.3pm
+Manifying blib/man3/Metno::Astro::AlmanacAlgorithm.3pm
+make[1]: Leaving directory `/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm'
+/usr/bin/make test
+make[1]: Entering directory `/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm'
+PERL_DL_NONLAZY=1 /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
+t/01-JulianDay_Epoch.t .. ok
+t/02-SunriseSet.t ....... ok
+t/03-AzimuthAltitude.t .. ok
+t/04-MoonriseSet.t ...... ok
+t/10-astroEvent.t ....... ok
+All tests successful.
+Files=5, Tests=225,  2 wallclock secs ( 0.05 usr  0.01 sys +  1.81 cusr  0.03 csys =  1.90 CPU)
+Result: PASS
+make[1]: Leaving directory `/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm'
+touch build-stamp
+ fakeroot debian/rules binary
+dh_testdir
+dh_testroot
+dh_clean -k
+dh_clean: dh_clean -k is deprecated; use dh_prep instead
+# Add commands to install the package into debian/ACKAGE_NAME here
+/usr/bin/make install DESTDIR=/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/debian/libmetno-astro-almanacalgorithm-perl PREFIX=/usr
+make[1]: Entering directory `/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm'
+Files found in blib/arch: installing files in blib/lib into architecture dependent library tree
+Installing /elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/debian/libmetno-astro-almanacalgorithm-perl/usr/lib/perl5/auto/Metno/Astro/AlmanacAlgorithm/AlmanacAlgorithm.so
+Installing /elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/debian/libmetno-astro-almanacalgorithm-perl/usr/lib/perl5/auto/Metno/Astro/AlmanacAlgorithm/AlmanacAlgorithm.bs
+Installing /elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/debian/libmetno-astro-almanacalgorithm-perl/usr/lib/perl5/Sunrise.pm
+Installing /elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/debian/libmetno-astro-almanacalgorithm-perl/usr/lib/perl5/Metno/Astro/bomb.pl
+Installing /elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/debian/libmetno-astro-almanacalgorithm-perl/usr/lib/perl5/Metno/Astro/check.pl
+Installing /elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/debian/libmetno-astro-almanacalgorithm-perl/usr/lib/perl5/Metno/Astro/t.pl
+Installing /elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/debian/libmetno-astro-almanacalgorithm-perl/usr/lib/perl5/Metno/Astro/AlmanacAlgorithm.pm
+Installing /elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/debian/libmetno-astro-almanacalgorithm-perl/usr/lib/perl5/Metno/Astro/JPLEPH.405
+Installing /elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/debian/libmetno-astro-almanacalgorithm-perl/usr/share/man/man3/Sunrise.3pm
+Installing /elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm/debian/libmetno-astro-almanacalgorithm-perl/usr/share/man/man3/Metno::Astro::AlmanacAlgorithm.3pm
+make[1]: Leaving directory `/elysium/franktt/git/astro/src/astro/Metno-Astro-AlmanacAlgorithm'
+touch install-stamp
+dh_testdir
+dh_testroot
+dh_installexamples 
+dh_installdocs README
+dh_installchangelogs Changes
+dh_shlibdeps
+dh_strip
+dh_perl
+dh_compress
+dh_fixperms
+dh_installdeb
+dh_gencontrol
+dh_md5sums
+dh_builddeb
+dpkg-deb: building package `libmetno-astro-almanacalgorithm-perl' in `../libmetno-astro-almanacalgorithm-perl_0.10-1_amd64.deb'.
+ dpkg-genchanges -b >../libmetno-astro-almanacalgorithm-perl_0.10-1_amd64.changes
+dpkg-genchanges: binary-only upload - not including any source code
+ dpkg-source -i --after-build Metno-Astro-AlmanacAlgorithm
+dpkg-buildpackage: binary only upload (no source included)
+Now running lintian...
+E: libmetno-astro-almanacalgorithm-perl changes: bad-distribution-in-changes-file ubuntu
+W: libmetno-astro-almanacalgorithm-perl: new-package-should-close-itp-bug
+W: libmetno-astro-almanacalgorithm-perl: copyright-contains-dh-make-perl-boilerplate
+W: libmetno-astro-almanacalgorithm-perl: copyright-without-copyright-notice
+W: libmetno-astro-almanacalgorithm-perl: extended-description-line-too-long
+W: libmetno-astro-almanacalgorithm-perl: extended-description-line-too-long
+W: libmetno-astro-almanacalgorithm-perl: description-contains-dh-make-perl-template
+W: libmetno-astro-almanacalgorithm-perl: manpage-has-errors-from-pod2man usr/share/man/man3/Metno::Astro::AlmanacAlgorithm.3pm.gz:1065
+W: libmetno-astro-almanacalgorithm-perl: manpage-has-errors-from-man usr/share/man/man3/Sunrise.3pm.gz 196: warning [p 2, 2.0i]: can't break line
+Finished running lintian.

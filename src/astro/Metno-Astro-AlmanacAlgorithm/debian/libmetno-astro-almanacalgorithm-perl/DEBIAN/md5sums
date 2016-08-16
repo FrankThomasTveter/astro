@@ -1,0 +1,14 @@
+05688c69f8a2dcc2fa63f41851345310  usr/lib/perl5/Metno/Astro/AlmanacAlgorithm.pm
+8e59b7397449e2c5e2a638e9c8a3741e  usr/lib/perl5/Metno/Astro/JPLEPH.405
+08fb4049cb7efde8751a319c37ba96f6  usr/lib/perl5/Metno/Astro/bomb.pl
+27517f3632c0e47a9acefb0d3f799972  usr/lib/perl5/Metno/Astro/check.pl
+cd942bc1eb33f03a7aff9c288c3e73ed  usr/lib/perl5/Metno/Astro/t.pl
+e461487813d45a991e5e630d434f88d3  usr/lib/perl5/Sunrise.pm
+d41d8cd98f00b204e9800998ecf8427e  usr/lib/perl5/auto/Metno/Astro/AlmanacAlgorithm/AlmanacAlgorithm.bs
+a6c3114fc63eef13037b74c6d6d8c721  usr/lib/perl5/auto/Metno/Astro/AlmanacAlgorithm/AlmanacAlgorithm.so
+05ded9917e2bb30d6efbdb8716f53e3e  usr/share/doc/libmetno-astro-almanacalgorithm-perl/README
+70beccb837515c119beae4ee4def65de  usr/share/doc/libmetno-astro-almanacalgorithm-perl/changelog.Debian.gz
+d01939546895c4dc5c9d9f9cac3e99fa  usr/share/doc/libmetno-astro-almanacalgorithm-perl/changelog.gz
+2484b4247294f61615147ec2716a887b  usr/share/doc/libmetno-astro-almanacalgorithm-perl/copyright
+f2b0d84d145a0a6d536d9a26fa80ec8b  usr/share/man/man3/Metno::Astro::AlmanacAlgorithm.3pm.gz
+008d883b7aa810d4e9ec60ad65467098  usr/share/man/man3/Sunrise.3pm.gz

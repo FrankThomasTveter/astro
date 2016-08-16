@@ -1,0 +1,23 @@
+# syntax:
+# city latitude longitude
+# isodate time-rise time-down time-transit
+# isodate time-rise time-down time-transit
+#
+# city ...
+# isodate ...
+#
+# longitude and latitude in decimals
+# time in UTC
+Oslo 59.91339 10.7195
+2008-01-02 02:17 10:21 06:26
+2008-03-17 11:29 04:50 20:29
+
+Trondheim 63.42722 10.39847
+2008-01-01 01:06 10:07 05:46
+2008-03-20 16:10 05:04 22:47 
+
+Tromsoe 69.66233 18.94189
+2008-01-01 01:06 08:52 05:11
+2008-03-20 15:24 04:47 22:12
+2011-07-02 00:03 21:49 11:46
+

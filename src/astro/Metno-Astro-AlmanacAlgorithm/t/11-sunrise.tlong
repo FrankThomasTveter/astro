@@ -1,0 +1,242 @@
+#!/usr/bin/perl
+###########################################################
+#
+# END-TO-END consistency check of "Sunrise.pl", over 1 year
+# with 7day/30deg resolution.
+#
+# Make sure you EDIT $server to match the web-server 
+# you want to check for consistency.
+#
+###########################################################
+
+use Test::More tests => 4823;
+use Metno::Astro::AlmanacAlgorithm qw(:all);
+use DateTime;
+use LWP::Simple;
+use strict;
+use POSIX;
+use List::Util qw[min max];
+
+######################## EDIT ##############################
+
+my $server="http://dev-vm089/weatherapi/sunrise/1.0/";
+
+###########################################################
+
+# loop over time interval
+my $start = DateTime->new(
+    day   => 1,
+    month => 1,
+    year  => 2012,
+    );
+
+my $stop = DateTime->new(
+    day   => 31,
+    month => 12,
+    year  => 2012,
+    );
+
+my $sun_set_dt=0;
+my $sun_rise_dt=0;
+my $moon_set_dt=0;
+my $moon_rise_dt=0;
+my $sun_altitude_dt=0;
+my $sunminlat=90.0-23.5;
+my $moonminlat=90.0-28.5;
+my %cnt;
+my %tot;
+
+while ( $start <= $stop ) {
+    my $date=$start->ymd('-');
+    for (my $lon=-180; $lon<=180; $lon=$lon+30) {	# loop over longitude
+	for (my $lat=-90; $lat<=90; $lat=$lat+30) {    # loop over latitude
+#	    printf "Date: %s", $start->ymd('-');
+#	    print "   Latitude: $lat    Longitude: $lon\n";
+	    my $error=0;
+	    # make url
+	    my $test_url = "$server?lat=$lat;lon=$lon;date=$date";
+	    #
+	    my $msg="TEST URL: $test_url";
+	    #
+	    my $test_content = get $test_url;
+	    #
+            my $test_sun_nr="undefined";
+            my $test_sun_ns="undefined";
+            my $test_sun_rise;
+            my $test_sun_set;
+            my $test_sun_altitude;
+            my $test_moon_nr="undefined";
+            my $test_moon_ns="undefined";
+            my $test_moon_rise;
+            my $test_moon_set;
+	    if (defined $test_content) {
+		if ($test_content =~ m/<sun([^>]*)>/) {
+		    my $line=$1;
+		    if ($line =~ m/never_rise="(\w*)"/) {
+			$test_sun_nr=$1;
+		    }
+		    if ($line =~ m/never_set="(\w*)"/) {
+			$test_sun_nr="false";
+		    }
+		    if ($line =~ m/set="(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z"/) {
+			$test_sun_set = DateTime->new(
+			    year   => $1,
+			    month => $2,
+			    day  => $3,
+			    hour  => $4,
+			    minute  => $5,
+			    second  => floor(0.5+$6)
+			    );
+		    }
+		    if ($line =~ m/rise="(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z"/) {
+			$test_sun_rise = DateTime->new(
+			    year   => $1,
+			    month => $2,
+			    day  => $3,
+			    hour  => $4,
+			    minute  => $5,
+			    second  => floor(0.5+$6)
+			    );
+		    }
+		}
+		if ($test_content =~ m/<noon([^>]*)>/) {
+		    my $line=$1;
+		    if ($line =~ m/altitude="(\w*)"/) {
+			$test_sun_altitude=$1;
+		    }
+		}
+		if ($test_content =~ m/<moon([^>]*)>/) {
+		    my $line=$1;
+		    if ($line =~ m/never_rise="(\w*)"/) {
+			$test_moon_nr=$1;
+		    }
+		    if ($line =~ m/never_set="(\w*)"/) {
+			$test_moon_ns=$1;
+		    }
+		    if ($line =~ m/set="(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z"/) {
+			$test_moon_set = DateTime->new(
+			    year   => $1,
+			    month => $2,
+			    day  => $3,
+			    hour  => $4,
+			    minute  => $5,
+			    second  => floor(0.5+$6)
+			    );
+		    }
+		    if ($line =~ m/rise="(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z"/) {
+			$test_moon_rise = DateTime->new(
+			    year   => $1,
+			    month => $2,
+			    day  => $3,
+			    hour  => $4,
+			    minute  => $5,
+			    second  => floor(0.5+$6)
+			    );
+		    }
+		}
+	    } else {
+		die "##### Web-server not available: $test_url #####\n";
+	    }
+	    #
+	    # print "$content\n";
+	    #
+	    # Sleep for 10 milliseconds
+ 	    select(undef, undef, undef, 0.010);
+	    #
+	    # check contents...
+	    #
+	    if (($test_sun_rise || $test_sun_set)  && ("$test_sun_nr"ne"undefined" || "$test_sun_ns"ne"undefined")) {
+		$msg=$msg.sprintf "\n NOT consistent - Rise/set vs Nr/Ns conflict lat=%4i",$lat;
+		$error=1;
+	    } elsif ( abs($lat) < $sunminlat  ) {
+		if (! $test_sun_rise) {
+		    $msg=$msg.sprintf "\n NOT consistent - No Sun rise at lat=%4i",$lat;		    
+		    $error=1;
+		} elsif (! $test_sun_set) {
+		    $msg=$msg.sprintf "\n NOT consistent - No Sun set at lat=%4i",$lat;   
+		    $error=1;
+		} elsif ("$test_sun_nr"eq"true") {
+		    $msg=$msg.sprintf "\n NOT consistent - Sun never rises at lat=%4i",$lat;		    
+		    $error=1;
+		} elsif ("$test_sun_ns"eq"true") {
+		    $msg=$msg.sprintf "\n NOT consistent - Sun never sets at lat=%4i",$lat;		    
+		    $error=1;
+		} else {
+		    $msg=$msg.sprintf "\n     consistent - Sun rise/set";
+		}
+            } else {
+		if ( $test_sun_rise && "$test_sun_nr"eq"true") {
+		    $msg=$msg.sprintf "\n NOT consistent - Sun rise mismatch at lat=%4i",$lat;		    
+		    $error=1;
+		} elsif ( $test_sun_set && "$test_sun_ns"eq"true") {
+		    $msg=$msg.sprintf "\n NOT consistent - Sun set mismatch at lat=%4i",$lat;		    
+		    $error=1;
+		} elsif ("$test_sun_nr"eq"true" && "$test_sun_ns"eq"true") {
+		    $msg=$msg.sprintf "\n NOT consistent - Sun never rise/set mismatch at lat=%4i",$lat;		    
+		    $error=1;
+		} else {
+		    $msg=$msg.sprintf "\n     consistent - Sun rise/set";
+		}
+            }
+	    if (($test_moon_rise || $test_moon_set)  && ("$test_moon_nr"ne"undefined" || "$test_moon_ns"ne"undefined")) {
+		$msg=$msg.sprintf "\n NOT consistent - Rise/set vs Nr/Ns conflict lat=%4i",$lat;		    
+		$error=1;
+	    } elsif ( abs($lat) < $moonminlat  ) { # "moon_never_*" not allowed
+                if (! $test_moon_rise && ! $test_moon_set) {
+		    $msg=$msg.sprintf "\n NOT consistent - No Moon rise/set at lat=%4i",$lat;   
+		    $error=1;
+		} elsif ("$test_moon_nr"eq"true") {
+		    $msg=$msg.sprintf "\n NOT consistent - Moon never rises at lat=%4i",$lat;		    
+		    $error=1;
+		} elsif ("$test_moon_ns"eq"true") {
+		    $msg=$msg.sprintf "\n NOT consistent - Moon never sets at lat=%4i",$lat;		    
+		    $error=1;
+		} else {
+		    $msg=$msg.sprintf "\n     consistent - Moon rise/set";
+		}
+            } else {
+		if ( $test_moon_rise && "$test_moon_nr"eq"true") {
+		    $msg=$msg.sprintf "\n NOT consistent - Moon rise mismatch at lat=%4i",$lat;		    
+		    $error=1;
+		} elsif ( $test_moon_set && "$test_moon_ns"eq"true") {
+		    $msg=$msg.sprintf "\n NOT consistent - Moon set mismatch at lat=%4i",$lat;		    
+		    $error=1;
+		} elsif ("$test_moon_nr"eq"true" && "$test_moon_ns"eq"true") {
+		    $msg=$msg.sprintf "\n NOT consistent - Moon never rise/set mismatch at lat=%4i",$lat;		    
+		    $error=1;
+		} else {
+		    $msg=$msg.sprintf "\n     consistent - Moon rise/set";
+		}
+            }
+	    if (! defined $cnt{'nr'}{$lat}) {$cnt{'nr'}{$lat}=0;}
+	    if (! defined $cnt{'ns'}{$lat}) {$cnt{'ns'}{$lat}=0;}
+	    if (! defined $tot{$lat}) {$tot{$lat}=0;}
+	    if ("$test_sun_nr"eq"true") {
+		$cnt{'nr'}{$lat}=$cnt{'nr'}{$lat}+1;
+	    }
+	    if ("$test_sun_ns"eq"true") {
+		$cnt{'ns'}{$lat}=$cnt{'ns'}{$lat}+1;
+	    }
+	    $tot{$lat}=$tot{$lat}+1;
+	    #
+	    # write debug output if any errors were detected...
+            if ($error==1) {
+		$msg=$msg."=====================MISMATCH===================\n";
+		$msg=$msg."$test_content\n";
+	    }
+	    ok($error==0,$msg);
+	    #print $msg;
+	}
+    }
+    $start->add(days => 7.0238883);
+#    $start->add(days => 1.0);
+}
+for my $k (sort  { $a <=> $b } keys %tot) {
+    if (defined $cnt{'ns'}{$k} && defined $cnt{'ns'}{$k}) {
+	my $pst_nr=(100*$cnt{'nr'}{$k}/max(1,$tot{$k}));
+	my $pst_ns=(100*$cnt{'ns'}{$k}/max(1,$tot{$k}));
+	printf "Lat:%4i  never rises:%6.2f%% sets:%6.2f%% cnt:%i\n",$k,$pst_nr,$pst_ns,$tot{$k};
+    }
+}
+print "Max error: $sun_rise_dt $sun_set_dt $moon_rise_dt $moon_set_dt $sun_altitude_dt\n";
+#die "Debug";

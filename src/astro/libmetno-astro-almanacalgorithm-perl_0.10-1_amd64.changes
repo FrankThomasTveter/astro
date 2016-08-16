@@ -1,0 +1,22 @@
+Format: 1.8
+Date: Mon, 10 Dec 2012 10:39:02 +0100
+Source: libmetno-astro-almanacalgorithm-perl
+Binary: libmetno-astro-almanacalgorithm-perl
+Architecture: amd64
+Version: 0.10-1
+Distribution: ubuntu
+Urgency: low
+Maintainer: root <frank.tveter@met.no>
+Changed-By: Frank Tveter <frank.tveter@met.no>
+Description: 
+ libmetno-astro-almanacalgorithm-perl - When does the sun rise and set for a given place?
+Changes: 
+ libmetno-astro-almanacalgorithm-perl (0.10-1) ubuntu; urgency=low
+ .
+   * Initial Release.
+Checksums-Sha1: 
+ 22308973159e0d644751ddb4cb700a9163da00e3 9375910 libmetno-astro-almanacalgorithm-perl_0.10-1_amd64.deb
+Checksums-Sha256: 
+ 2f2c9fe7605873c8784d4e99d4ff044a1847615a6c7813bb20a11bfabedbab9d 9375910 libmetno-astro-almanacalgorithm-perl_0.10-1_amd64.deb
+Files: 
+ 3157dc1dd1a1c8c0984bbef16998b433 9375910 perl optional libmetno-astro-almanacalgorithm-perl_0.10-1_amd64.deb
